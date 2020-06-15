@@ -5,6 +5,7 @@ import webbrowser
 from datetime import timedelta, datetime
 from enum import Enum, unique
 from urllib.parse import urlparse
+import asyncio
 
 import dateutil.parser
 from adal import AuthenticationContext, AdalError
@@ -81,8 +82,9 @@ class _AadHelper:
     certificate = None
     msi_params = None
     token_provider = None
+    code_callback = None
 
-    def __init__(self, kcsb: "KustoConnectionStringBuilder"):
+    def __init__(self, kcsb: "KustoConnectionStringBuilder", cb: Callable=None):
         self.kusto_uri = "{0.scheme}://{0.hostname}".format(urlparse(kcsb.data_source))
         self.username = None
 
@@ -117,6 +119,7 @@ class _AadHelper:
         else:
             self.authentication_method = AuthenticationMethod.aad_device_login
             self.client_id = "db662dc1-0cfe-4e1c-a843-19a68e65be58"
+            self.code_callback = cb
 
         authority = kcsb.authority_id or "common"
         aad_authority_uri = os.environ.get("AadAuthorityUri", CLOUD_LOGIN_URL)
@@ -209,8 +212,12 @@ class _AadHelper:
             token = self.auth_context.acquire_token_with_client_credentials(self.kusto_uri, self.client_id, self.client_secret)
         elif self.authentication_method is AuthenticationMethod.aad_device_login:
             code = self.auth_context.acquire_user_code(self.kusto_uri, self.client_id)
+            if self.code_callback is not None:
+                if asyncio.iscoroutinefunction(self.code_callback):
+                    asyncio.run(self.code_callback(code['user_code']))
+                else:
+                    self.code_callback(code['user_code'])
             print(code[OAuth2DeviceCodeResponseParameters.MESSAGE])
-            webbrowser.open(code[OAuth2DeviceCodeResponseParameters.VERIFICATION_URL])
             token = self.auth_context.acquire_token_with_device_code(self.kusto_uri, code, self.client_id)
         elif self.authentication_method is AuthenticationMethod.aad_application_certificate:
             token = self.auth_context.acquire_token_with_client_certificate(self.kusto_uri, self.client_id, self.certificate, self.thumbprint)

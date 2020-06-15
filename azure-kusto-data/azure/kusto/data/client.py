@@ -520,7 +520,7 @@ class KustoClient:
     # The maximum amount of connections to be able to operate in parallel
     _max_pool_size = 100
 
-    def __init__(self, kcsb: Union[KustoConnectionStringBuilder, str]):
+    def __init__(self, kcsb: Union[KustoConnectionStringBuilder, str], code_callback: Callable=None):
         """
         Kusto Client constructor.
         :param kcsb: The connection string to initialize KustoClient.
@@ -538,7 +538,7 @@ class KustoClient:
         self._query_endpoint = "{0}/v2/rest/query".format(kusto_cluster)
         self._streaming_ingest_endpoint = "{0}/v1/rest/ingest/".format(kusto_cluster)
         # notice that in this context, federated actually just stands for add auth, not aad federated auth (legacy code)
-        self._auth_provider = _AadHelper(kcsb) if kcsb.aad_federated_security else None
+        self._auth_provider = _AadHelper(kcsb, code_callback) if kcsb.aad_federated_security else None
         self._request_headers = {"Accept": "application/json", "Accept-Encoding": "gzip,deflate", "x-ms-client-version": "Kusto.Python.Client:" + VERSION}
 
     def execute(self, database: str, query: str, properties: ClientRequestProperties = None) -> KustoResponseDataSet:
