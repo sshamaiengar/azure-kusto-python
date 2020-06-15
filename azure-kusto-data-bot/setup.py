@@ -26,7 +26,7 @@ setup(
     description="Kusto Data Client",
     long_description=open("README.rst", "r").read(),
     url="https://github.com/sshamaiengar/azure-kusto-python-bot",
-    download_url="https://github.com/sshamaiengar/azure-kusto-python-bot/archive/v0.1.1.tar.gz",
+    download_url="https://github.com/sshamaiengar/azure-kusto-python-bot/archive/v0.1.2.tar.gz",
     author="Stephen Shamaiengar",
     author_email="s.shamaiengar@gmail.com",
     license="MIT",
