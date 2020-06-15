@@ -7,11 +7,12 @@ from os import path
 from setuptools import setup, find_packages
 
 PACKAGE_NAME = "azure-kusto-data-bot"
+PACKAGE_PATH = "azure-kusto-data"
 
 # a-b-c => a/b/c
-PACKAGE_FOLDER_PATH = PACKAGE_NAME.replace("-", path.sep)
+PACKAGE_FOLDER_PATH = PACKAGE_PATH.replace("-", path.sep)
 # a-b-c => a.b.c
-NAMESPACE_NAME = PACKAGE_NAME.replace("-", ".")
+NAMESPACE_NAME = PACKAGE_PATH.replace("-", ".")
 
 with open(path.join(PACKAGE_FOLDER_PATH, "_version.py"), "r") as fd:
     VERSION = re.search(r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]', fd.read(), re.MULTILINE).group(1)
