@@ -13,8 +13,12 @@ Overview
     client_secret = "<insert here your AAD application key>"
     authority_id = "<insert here your AAD tenet id>"
 
-    kcsb = KustoConnectionStringBuilder.with_aad_application_key_authentication(cluster, client_id, client_secret, authority_id)
-    client = KustoClient(kcsb)
+    # Callback to get auth code for device authentication
+    def cb(code):
+        print(f"Your authentication code is {code}")
+
+    kcsb = KustoConnectionStringBuilder.with_aad_device_authentication(cluster)
+    client = KustoClient(kcsb, cb)
 
     db = "Samples"
     query = "StormEvents | take 10"
@@ -24,6 +28,10 @@ Overview
         print(row[0], " ", row["EventType"])
 
 
+This package is a fork of `Azure Kusto Data <https://pypi.org/project/azure-kusto-data/>`_, adapted to enable device authentication in situations where the Kusto Data Client is used on the backend.
+There are minor changes from the original package and project, which can be seen in this package's repository.
+
+---------
 
 *Kusto Python Client* Library provides the capability to query Kusto clusters using Python.
 It is Python 3.x compatible and supports

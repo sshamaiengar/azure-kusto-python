@@ -6,7 +6,7 @@ from os import path
 # Always prefer setuptools over distutils
 from setuptools import setup, find_packages
 
-PACKAGE_NAME = "azure-kusto-data"
+PACKAGE_NAME = "azure-kusto-data-bot"
 
 # a-b-c => a/b/c
 PACKAGE_FOLDER_PATH = PACKAGE_NAME.replace("-", path.sep)
@@ -25,9 +25,10 @@ setup(
     version=VERSION,
     description="Kusto Data Client",
     long_description=open("README.rst", "r").read(),
-    url="https://github.com/Azure/azure-kusto-python",
-    author="Microsoft Corporation",
-    author_email="kustalk@microsoft.com",
+    url="https://github.com/sshamaiengar/azure-kusto-python-bot",
+    download_url="https://github.com/sshamaiengar/azure-kusto-python-bot/archive/v0.1.1.tar.gz",
+    author="Stephen Shamaiengar",
+    author_email="s.shamaiengar@gmail.com",
     license="MIT",
     classifiers=[
         # 5 - Production/Stable depends on multi-threading / aio / perf
@@ -40,8 +41,7 @@ setup(
         "Programming Language :: Python :: 3.8",
         "License :: OSI Approved :: MIT License",
     ],
-    namespace_packages=["azure"],
-    keywords="kusto wrapper client library",
+    keywords="kusto wrapper client library bot framework",
     packages=find_packages(exclude=["azure", "tests"]),
     install_requires=["adal>=1.0.0", "python-dateutil>=2.8.0", "requests>=2.13.0", "msrestazure>=0.4.14"],
     extras_require={"pandas": ["pandas"]},
