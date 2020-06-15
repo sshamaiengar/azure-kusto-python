@@ -6,6 +6,7 @@ from datetime import timedelta, datetime
 from enum import Enum, unique
 from urllib.parse import urlparse
 import asyncio
+from typing import Callable
 
 import dateutil.parser
 from adal import AuthenticationContext, AdalError
